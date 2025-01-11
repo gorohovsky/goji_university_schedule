@@ -1,0 +1,14 @@
+name: goji_university_schedule
+services:
+  postgres:
+    image: postgres:17.2
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    container_name: goji_postgres
+    volumes:
+      - goji_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+volumes:
+  goji_postgres_data:
