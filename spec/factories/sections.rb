@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :section do
     teacher
-    subject
+    subject { teacher.subjects.first }
     classroom
 
     transient do
