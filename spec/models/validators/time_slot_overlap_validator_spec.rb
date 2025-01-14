@@ -12,7 +12,7 @@ describe Validators::TimeSlotOverlapValidator do
   end
 
   context 'when section has overlapping time slots' do
-    let(:section) { build(:section, :with_overlapping_time_slots) }
+    let(:section) { build(:section, :with_invalid_time_slots) }
 
     specify 'section is invalid' do
       expect(subject).to be false

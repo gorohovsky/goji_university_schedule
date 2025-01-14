@@ -8,8 +8,8 @@ FactoryBot.define do
       default_time_slots do
         [
           [:Monday,    '7:30am', '8:20am'],
-          [:Wednesday, '8:00am', '8:50am'],
-          [:Friday,    '8:00am', '8:50am']
+          [:Wednesday, '9:00am', '9:50am'],
+          [:Friday,    '9:10pm', '10:00pm']
         ]
       end
       extra_time_slots { nil }
@@ -19,8 +19,18 @@ FactoryBot.define do
       end
     end
 
-    trait :with_overlapping_time_slots do
+    trait :with_invalid_time_slots do
       extra_time_slots { [[:Monday, '8:00am', '8:50am']] }
+    end
+
+    trait :without_overlapping_time_slots do
+      default_time_slots do
+        [
+          [:Tuesday,  '7:30am', '8:20am'],
+          [:Thursday, '9:00am', '9:50am'],
+          [:Saturday, '9:10pm', '10:00pm']
+        ]
+      end
     end
 
     after :build do |section, evaluator|

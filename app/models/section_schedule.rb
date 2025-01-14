@@ -34,7 +34,11 @@ class SectionSchedule < ApplicationRecord
   def overlaps?(other_time_slot)
     return false if day_of_week != other_time_slot.day_of_week
 
-    (start_time...end_time).overlap?(other_time_slot.start_time...other_time_slot.end_time)
+    to_range.overlap? other_time_slot.to_range
+  end
+
+  def to_range
+    start_time...end_time
   end
 
   %i[start_time end_time].each do |method|

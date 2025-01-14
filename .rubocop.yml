@@ -49,15 +49,3 @@ Layout/FirstArgumentIndentation:
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%w': '()'
-
-Lint/AmbiguousRange:
-  Exclude:
-    - 'app/models/validators/time_slot_overlap_validator.rb'
-
-Lint/RequireRangeParentheses:
-  Exclude:
-    - 'app/models/validators/time_slot_overlap_validator.rb'
-
-Lint/EmptyWhen:
-  Exclude:
-    - 'app/models/validators/time_slot_overlap_validator.rb'

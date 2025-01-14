@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   defaults format: :json do
+    resources :enrollments, only: %i[show create destroy]
     resources :sections, only: %i[show create]
   end
 

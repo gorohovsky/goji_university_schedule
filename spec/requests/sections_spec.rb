@@ -11,7 +11,7 @@ describe 'Sections', type: :request do
   end
 
   let(:invalid_attributes) do
-    section = build(:section, :with_overlapping_time_slots)
+    section = build(:section, :with_invalid_time_slots)
     section_params(teacher:, classroom:, section:)
   end
 

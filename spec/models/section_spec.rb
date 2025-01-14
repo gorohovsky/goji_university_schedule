@@ -26,4 +26,26 @@ describe Section, type: :model do
       end
     end
   end
+
+  describe '#overlaps?' do
+    let(:section1) { build(:section) }
+
+    subject { section1.overlaps? section2 }
+
+    context 'when the section overlaps another section' do
+      let(:section2) { build(:section, extra_time_slots: [[:Friday, '11:30am', '12:20pm']]) }
+
+      it 'returns true' do
+        expect(subject).to be true
+      end
+    end
+
+    context 'when the section does not overlap another section' do
+      let(:section2) { build(:section, :without_overlapping_time_slots) }
+
+      it 'returns false' do
+        expect(subject).to be false
+      end
+    end
+  end
 end

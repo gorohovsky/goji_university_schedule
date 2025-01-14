@@ -9,7 +9,7 @@ module Validators
           next
         when 2
           check_overlap(section, *day_schedules)
-        when 3..
+        when (3..)
           day_schedules.combination(2).each { check_overlap(section, *_1) }
         end
       end

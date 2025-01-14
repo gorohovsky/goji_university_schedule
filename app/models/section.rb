@@ -14,6 +14,16 @@ class Section < ApplicationRecord
 
   TEACHER_SUBJECT_CONFLICT_ERROR = "The teacher doesn't teach the subject".freeze
 
+  def overlaps?(another_section)
+    section_schedules.each do |ss1|
+      another_section.section_schedules.each do |ss2|
+        return true if ss1.overlaps? ss2
+      end
+    end
+
+    false
+  end
+
   private
 
   def ensure_teacher_teaches_subject
