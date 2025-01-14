@@ -13,19 +13,19 @@ class SectionSchedule < ApplicationRecord
 
   validates :start_time, timeliness: {
     on_or_after: MIN_START_TIME,
-    on_or_after_message: "the earliest time is #{MIN_START_TIME}",
+    message: "must be >= #{MIN_START_TIME}",
     type: :time
   }
 
   validates :end_time, timeliness: {
     after: :start_time,
-    message: 'must be greater than start_time',
+    message: 'must be > start_time',
     type: :time
   }
 
   validates :end_time, timeliness: {
     on_or_before: MAX_END_TIME,
-    message: "the latest time is #{MAX_END_TIME}",
+    message: "must be <= #{MAX_END_TIME}",
     type: :time
   }
 
