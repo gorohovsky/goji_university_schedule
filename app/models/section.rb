@@ -1,7 +1,7 @@
 class Section < ApplicationRecord
-  belongs_to :teacher
-  belongs_to :subject
-  belongs_to :classroom
+  belongs_to :teacher, default:   -> { Teacher.find teacher_id }
+  belongs_to :subject, default:   -> { Subject.find subject_id }
+  belongs_to :classroom, default: -> { Classroom.find classroom_id }
   has_many   :enrollments, dependent: :destroy
   has_many   :section_schedules, dependent: :destroy
 
