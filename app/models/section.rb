@@ -7,10 +7,9 @@ class Section < ApplicationRecord
   accepts_nested_attributes_for :section_schedules
 
   validate :ensure_teacher_teaches_subject
-
   validates :section_schedules, presence: true
-
   validates_with TimeSlotOverlapValidator
+  validates_with TeacherClassroomAvailabilityValidator
 
   TEACHER_SUBJECT_CONFLICT_ERROR = "The teacher doesn't teach the subject".freeze
 
@@ -20,6 +19,10 @@ class Section < ApplicationRecord
         ss1.overlaps? ss2
       end
     end
+  end
+
+  def days_of_week
+    section_schedules.collect(&:day_of_week).uniq
   end
 
   private

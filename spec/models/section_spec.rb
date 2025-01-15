@@ -1,28 +1,22 @@
 require 'rails_helper'
+require 'support/shared_examples/section'
 
 describe Section, type: :model do
   describe 'validations' do
     subject { new_section.save }
 
-    context 'when the teacher does not teach the subject' do
-      let(:subject_without_teacher) { create(:subject) }
-      let(:new_section) { build(:section, subject: subject_without_teacher) }
+    describe 'teacher-subject consistency' do
+      context 'when the teacher does not teach the subject' do
+        let(:subject_without_teacher) { create(:subject) }
+        let(:new_section) { build(:section, subject: subject_without_teacher) }
+        let(:error_message) { { teacher_subject_conflict: ["The teacher doesn't teach the subject"] } }
 
-      specify 'no new section is created' do
-        expect { subject }.not_to change { Section.count }
+        it_behaves_like 'creation error'
       end
 
-      specify 'the new section contains a corresponding error' do
-        subject
-        expect(new_section.errors.messages).to eq(teacher_subject_conflict: ["The teacher doesn't teach the subject"])
-      end
-    end
-
-    context 'when the teacher teaches the subject' do
-      let(:new_section) { build(:section) }
-
-      specify 'a new section is created' do
-        expect { subject }.to change { Section.count }.by 1
+      context 'when the teacher teaches the subject' do
+        let(:new_section) { build(:section) }
+        it_behaves_like 'successful creation'
       end
     end
   end
