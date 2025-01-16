@@ -12,8 +12,6 @@ class Section < ApplicationRecord
   validates_with TimeSlotOverlapValidator
   validates_with TeacherClassroomAvailabilityValidator
 
-  TEACHER_SUBJECT_CONFLICT_ERROR = "The teacher doesn't teach the subject".freeze
-
   def overlaps?(another_section)
     section_schedules.any? do |ss1|
       another_section.section_schedules.any? do |ss2|
@@ -29,8 +27,8 @@ class Section < ApplicationRecord
   private
 
   def ensure_teacher_teaches_subject
-    return if teacher.subjects.include? subject
+    return if teacher.subject? subject
 
-    errors.add :teacher_subject_conflict, TEACHER_SUBJECT_CONFLICT_ERROR
+    errors.add :teacher_subject_conflict, Teacher::SUBJECT_CONFLICT_ERROR
   end
 end

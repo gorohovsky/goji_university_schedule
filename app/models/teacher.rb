@@ -4,4 +4,8 @@ class Teacher < ApplicationRecord
   has_many :subjects, through: :teacher_subjects
 
   validates :first_name, :last_name, presence: true
+
+  SUBJECT_CONFLICT_ERROR = "The teacher doesn't teach the subject".freeze
+
+  def subject?(subject) = subjects.include? subject
 end
