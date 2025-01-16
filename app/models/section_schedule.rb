@@ -4,9 +4,8 @@ class SectionSchedule < ApplicationRecord
   MIN_START_TIME = '7:30am'.freeze
   MAX_END_TIME = '10:00pm'.freeze
 
-  TIME_SLOT_DURATIONS = [50.minutes, 80.minutes].freeze
-  DURATION_WARNING = 'Section duration must be 50 or 80 minutes'.freeze
-
+  ALLOWED_DURATIONS = [50.minutes, 80.minutes].freeze
+  DURATION_ERROR = 'Section duration must be 50 or 80 minutes'.freeze
   DEFAULT_TIME_FORMAT = '%I:%M%p'.freeze
 
   enum :day_of_week, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 7
@@ -37,26 +36,24 @@ class SectionSchedule < ApplicationRecord
     to_range.overlap? other_time_slot.to_range
   end
 
-  def to_range
-    start_time...end_time
-  end
+  def to_range = start_time...end_time
 
-  %i[start_time end_time].each do |method|
-    define_method("formatted_#{method}") do
-      format_time send(method)
+  def duration = end_time - start_time
+
+  def interval = "#{formatted_start_time} - #{formatted_end_time}"
+
+  %i[start_time end_time].each do |method_name|
+    define_method("formatted_#{method_name}") do
+      format_time send(method_name)
     end
-  end
-
-  def interval
-    "#{formatted_start_time} - #{formatted_end_time}"
   end
 
   private
 
   def ensure_correct_time_slot_duration
-    return if TIME_SLOT_DURATIONS.include?(end_time - start_time)
+    return if ALLOWED_DURATIONS.include?(duration)
 
-    errors.add(:duration, DURATION_WARNING)
+    errors.add(:invalid_duration, DURATION_ERROR)
   end
 
   def format_time(time, format = DEFAULT_TIME_FORMAT)
