@@ -1,12 +1,10 @@
 module Validators
-  class TeacherClassroomAvailabilityValidator < ActiveModel::Validator
+  class TeacherClassroomAvailabilityValidator < OverlapValidator
     ERROR_TEMPLATE = 'The %s is busy with section %s'.freeze
 
     def validate(section)
-      potential_conflicts(section).each do |other_section|
-        next unless section.overlaps? other_section
-
-        add_conflict_error(section, other_section)
+      check_for_overlaps(section, potential_conflicts(section)) do |conflicting_section|
+        add_conflict_error(section, conflicting_section)
       end
     end
 
