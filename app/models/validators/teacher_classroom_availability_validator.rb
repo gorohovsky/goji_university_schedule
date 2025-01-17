@@ -15,13 +15,10 @@ module Validators
     def potential_conflicts(section)
       Section
         .joins(:section_schedules)
-        .includes(:section_schedules, :teacher, :classroom)
+        .includes(:section_schedules)
         .where(section_schedules: { day_of_week: section.days_of_week })
+        .where('teacher_id = ? OR classroom_id = ?', section.teacher_id, section.classroom_id)
         .where.not(id: section.id)
-        .and(
-          Teacher.where(id: section.teacher_id)
-            .or(Classroom.where(id: section.classroom_id))
-        )
     end
 
     def add_conflict_error(section, conflicting_section)
@@ -32,7 +29,7 @@ module Validators
     end
 
     def conflict_resource(section, conflicting_section)
-      section.teacher == conflicting_section.teacher ? :teacher : :classroom
+      section.teacher_id == conflicting_section.teacher_id ? :teacher : :classroom
     end
 
     def error_message(conflict_resource, conflicting_section)
