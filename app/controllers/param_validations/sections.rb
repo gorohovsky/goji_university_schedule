@@ -4,6 +4,7 @@ module ParamValidations
       TIME_FORMAT = /\A(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)\z/i
       TIME_WARNING = 'must have correct format, e.g. 8:00am or 10:30pm'.freeze
       SECTION_SCHEDULES_KEY = %i[section section_schedules_attributes].freeze
+      TIME_FIELDS = %i[start_time end_time].freeze
 
       params do
         required(:section).hash do
@@ -24,12 +25,11 @@ module ParamValidations
       rule('section.section_schedules_attributes') do
         section_schedules = values.dig(*SECTION_SCHEDULES_KEY)
 
-        section_schedules.each_with_index do |time_slot, i|
-          %i[start_time end_time].each do |param|
-            next if valid_time? time_slot[param]
+        section_schedules.each_with_index do |time_slot, index|
+          TIME_FIELDS.each do |field|
+            next if valid_time?(time_slot[field])
 
-            param_path = key([*SECTION_SCHEDULES_KEY, i, param])
-            param_path.failure TIME_WARNING
+            key([*SECTION_SCHEDULES_KEY, index, field]).failure(TIME_WARNING)
           end
         end
       end
