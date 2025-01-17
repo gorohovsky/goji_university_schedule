@@ -79,7 +79,7 @@ describe 'Enrollments', type: :request do
 
     context 'when the enrollment already exists' do
       let!(:enrollment) { create(:enrollment, student:, section:) }
-      let(:error_message) { { 'error' => 'Record already exists' } }
+      let(:error_message) { { 'error' => 'The enrollment already exists' } }
 
       it_behaves_like 'enrollment creation error', 409
     end

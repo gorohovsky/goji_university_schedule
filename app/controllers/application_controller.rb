@@ -11,6 +11,7 @@ class ApplicationController < ActionController::API
   end
 
   def record_not_unique(error)
-    render json: { error: 'Record already exists' }, status: 409
+    model = error.message.match(/index_(\w+)_on/)[1].singularize
+    render json: { error: "The #{model} already exists" }, status: 409
   end
 end
